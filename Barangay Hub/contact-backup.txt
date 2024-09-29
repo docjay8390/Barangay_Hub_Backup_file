@@ -1,0 +1,79 @@
+<div class="container" style="background-color: skyblue;">
+        <div class="box form-box" style="background-color: skyblue !important;">
+
+            <?php 
+            include("config.php");
+            
+            if (isset($_POST['submit'])) {
+                $Fullname = $_POST['Fullname'];
+                $Email = $_POST['Email'];
+                $Contact = $_POST['Contact'];
+                $Messages = $_POST['Messages'];
+            
+                mysqli_query($con, "INSERT INTO orders (Fullname, Email, Contact, Messages) 
+                                    VALUES ('$Fullname', '$Email', '$Contact', '$Messages')")
+                or die("Error Occurred");
+            
+                mysqli_query($con, "INSERT INTO history (Fullname, Email, Contact) 
+                                    VALUES ('$Fullname', '$Email', '$Contact')")
+                or die("Error Occurred");
+            
+                echo "<div class='message'>
+                        <p><h2 style='color: black;'>Your message has been sent to the admin!</h2></p>
+                        <br><hr>
+                        <br>";
+                echo "<a href='home.php'><button class='btn'>Home</button>";
+            }
+            else {
+                $id = $_SESSION['id'];
+                $query = mysqli_query($con, "SELECT * FROM accounts WHERE Id=$id ");
+
+                while($result = mysqli_fetch_assoc($query)){
+                    $Fullname = $result['Fullname'];
+                    $Email = $result['Email'];
+                    $Contact = $result['Contact'];  
+                }
+            ?>
+
+            <header>Contact Us <br> <span class="text-sm text">Fill up the form below to send us a message.</span></header>
+            <form action="" method="post">
+
+                <div class="field input">
+                    <label for="Fullname">Fullname</label>
+                    <input type="text" name="Fullname" id="username" value="<?php echo $Fullname; ?>" autocomplete="off" required>
+                </div>
+
+                <div class="field input">
+                    <label for="Email">Email</label>
+                    <input type="email" name="Email" id="username" value="<?php echo $Email; ?>" autocomplete="off" required>
+                </div>
+
+                <div class="field input">
+                    <label for="Contact">Date</label>
+                    <input type="date" name="Contact" id="username" value="" autocomplete="off" required>
+                </div>
+
+                <div class="field input">
+                    <label for="Contact">Subject</label>
+                    <input type="text" name="Contact" id="username" value="" autocomplete="off" required>
+                </div>
+
+                <div class="field input">
+                    <label for="Messages">Type your message here!</label>
+                    <textarea style="heigt: 50px;" name="Messages" id="ag" value="" autocomplete="off" required name="" id=""></textarea>
+                </div>
+                
+                <br>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>   
+                        <input class="bg-green-500 rounded-md text-white" style="padding: 5px 10px" type="submit" name="submit" value="Send" required>
+                    </div>
+                    <div >
+                        <a class="bg-red-500 rounded-md text-white" style="padding: 5px 10px" href="home.php">Cancel</a>
+                        <input class="bg-blue-500 rounded-md text-white" style="padding: 5px 10px" type="reset" name="submit" value="Reset" required>
+                    </div>
+                </div>         
+            </form>
+            <?php } ?>
+        </div>
+    </div>
